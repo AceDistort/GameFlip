@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block body %}
+    <section class="h-100 h-custom" >
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="card rounded-3">
+                        <img src="{{ asset('images/logo.svg') }}"
+                             class="w-50" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                             alt="Logo">
+                        <div class="card-body p-4 p-md-5">
+                            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Sign In</h3>
+
+                            {{ form_start(registrationForm) }}
+
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                    <div class="form-outline flex-fill mb-0">
+                                        {{ form_row(registrationForm.email, { 'attr' : { 'class' : 'form-control' } }) }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-circle-user fa-lg me-3 fa-fw"></i>
+                                    <div class="form-outline flex-fill mb-0">
+                                        {{ form_row(registrationForm.firstName, { 'attr' : { 'class' : 'form-control' } }) }}
+                                        {{ form_row(registrationForm.lastName, { 'attr' : { 'class' : 'form-control' } }) }}
+                                    </div>
+                                </div>
+
+                                <div class="d-flex flex-row align-items-center mb-4">
+                                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                    <div class="form-outline flex-fill mb-0">
+                                        {{ form_row(registrationForm.password.first, { 'attr' : { 'class' : 'form-control' } }) }}
+                                        {{ form_row(registrationForm.password.second, { 'attr' : { 'class' : 'form-control' } }) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-check d-flex justify-content-center">
+                                    {{ form_row(registrationForm.agreeTerms, { 'attr' : { 'class' : 'form-check-input me-2' } }) }}
+                                </div>
+
+                                {% if form_errors(registrationForm) != "" %}
+                                    <div class="alert alert-danger" role="alert">
+                                        {{ form_errors(registrationForm) }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="d-flex justify-content-center mx-4 mb-lg-4">
+                                    <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                                </div>
+
+
+
+                            {{ form_end(registrationForm) }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

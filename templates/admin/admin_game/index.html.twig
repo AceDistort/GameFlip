@@ -1,0 +1,39 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Games{% endblock %}
+
+{% block contenu %}
+    <p class="h3">Games</p>
+    <a class="btn btn-primary m-3" href="{{ path('app_admin_game_add') }}">Add a game</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Categories</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                <td>
+                    {% if game.image is not null %}
+                        <img src="{{ asset('uploads/game/' ~ game.image) }}" width="100px" />
+                    {% endif %}
+                </td>
+                <td>{{ game.name }}</td>
+                <td>{% for category in game.categories %}<span class="badge rounded-pill" style="background-color: {{ category.color }}">{{ category.name }}</span>{% endfor %}</td>
+                <td>{{ game.description }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_admin_game_modify', {'id': game.id}) }}">Modify</a>
+                    <a class="btn btn-danger" href="{{ path('app_admin_game_delete', {'id': game.id}) }}"
+                       onclick="return confirm('Are you sure you want to delete this game ?')"
+                    >Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

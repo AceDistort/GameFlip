@@ -1,0 +1,26 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ app.request.get('_route') == "app_admin_category_add" ? "Add" : "Modify" }} a category{% endblock %}
+
+{% block contenu %}
+    <h1>{{ app.request.get('_route') == "app_admin_category_add" ? "Add" : "Modify" }} a category</h1>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-8">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.color) }}
+        </div>
+    </div>
+
+    {% if app.request.get('_route') == "app_admin_category_add" %}
+        <button type="submit" class="btn btn-success">Add</button>
+    {% else %}
+        <button type="submit" class="btn btn-success">Modify</button>
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}

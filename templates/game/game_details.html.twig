@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Jeux disponibles{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app_game') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app_game') }}
+{% endblock %}
+
+{% block body %}
+
+    <section class="game-details d-flex flex-row">
+        {% if game.image is not null %}
+            <img class="" src="{{ asset('uploads/game/' ~ game.image) }}" alt="Image du {{ game.name }}">
+        {% endif %}
+        <div class="game-details__info">
+            <h3 class="h3 my-2">{{ game.name }}</h3>
+            <p>{% for category in game.categories %}<span class="badge rounded-pill my-1" style="background-color: {{ category.color }}">{{ category.name }}</span>&nbsp;{% endfor %}</p>
+            <p class="game-details__info__description">{{ game.description }}</p>
+            <a class="btn btn-primary">Réserver</a>
+        </div>
+    </section>
+
+{% endblock %}

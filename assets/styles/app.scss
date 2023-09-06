@@ -1,0 +1,27 @@
+@import './variables.scss';
+@import "~bootstrap/scss/bootstrap";
+
+body {
+    background-color: white;
+}
+
+.btn{
+    border-radius: 50px;
+    padding: 10px 30px;
+}
+
+.btn-primary {
+    color: $onPrimary !important;
+}
+
+.btn-outline-primary {
+    &:hover {
+        background-color: $primary;
+        color: $onPrimary;
+    }
+}
+
+.badge{
+    padding: 8px 15px;
+    font-size: 12px;
+}

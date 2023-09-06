@@ -5,12 +5,31 @@
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
         {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
+    {% block header %}
+        <header>
+            <nav class="navbar navbar-light bg-light px-3">
+                <a class="navbar-brand" href="{{ path('app_game_list') }}">
+                    <img src="{{ asset('images/logo.svg') }}" width="160" height="82" class="d-inline-block align-top"
+                         alt="logo">
+                </a>
+                <div>
+                    <a class="btn btn-outline-primary mx-2" href="{{ path('app_login') }}">Log In</a>
+                    <a class="btn btn-primary fw-bold mx-2" href="{{ path('app_register') }}">Sign In</a>
+                </div>
+            </nav>
+        </header>
+    {% endblock %}
+
+    <div class="mx-5 mt-5">
         {% block body %}{% endblock %}
+    </div>
     </body>
 </html>
