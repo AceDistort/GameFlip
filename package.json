@@ -3,7 +3,6 @@
         "@babel/core": "^7.17.0",
         "@babel/preset-env": "^7.16.0",
         "@symfony/webpack-encore": "^4.0.0",
-        "bootstrap": "^5.3.1",
         "core-js": "^3.23.0",
         "regenerator-runtime": "^0.13.9",
         "sass": "^1.66.1",
@@ -21,6 +20,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.4.2"
+        "@fortawesome/fontawesome-free": "^6.4.2",
+        "bootstrap": "^5.3.1"
     }
 }
