@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="d-flex flex-column justify-content-center align-items-center">
+        <img src="{{ asset('images/403.gif') }}" style="width: 30%">
+        <p class="h4 my-1">You don't have access here</p>
+        <a href="{{ path('app_game_list') }}" class="btn btn-outline-primary mt-3">Return to home</a>
+    </div>
+
+{% endblock %}
