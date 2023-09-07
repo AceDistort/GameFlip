@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
@@ -16,9 +17,22 @@ class Game
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne doit pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\NotNull(message: 'Le nom ne doit pas être vide')]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    #[Assert\Length(
+        min: 10,
+        max: 5000,
+        minMessage: 'La description doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'La description ne doit pas dépasser {{ limit }} caractères'
+    )]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 

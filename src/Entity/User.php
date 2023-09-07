@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -17,6 +19,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
+    #[Assert\NotBlank(message: 'The email cannot be blank.')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -26,12 +30,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[RollerworksPassword\PasswordRequirements(
+        minLength: 8,
+        requireLetters: true,
+        requireCaseDiff: true,
+        requireNumbers: true,
+        requireSpecialCharacter: true,
+        tooShortMessage: 'Your password must be at least {{length}} characters long',
+        missingLettersMessage: 'Your password must contain at least one letter',
+        requireCaseDiffMessage: 'Your password must contain lowercase and uppercase letters',
+        missingNumbersMessage: 'Your password must contain at least one number',
+        missingSpecialCharacterMessage: 'Your password must contain at least one special character',
+    )]
+    #[Assert\NotBlank(message: 'Please enter a password.')]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: 'The first name must be at least {{ limit }} characters long',
+        maxMessage: 'The first name cannot be longer than {{ limit }} characters'
+    )]
+    #[Assert\NotBlank(message: 'The first name cannot be blank.')]
     #[ORM\Column(length: 30)]
     private ?string $firstName = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: 'The last name must be at least {{ limit }} characters long',
+        maxMessage: 'The last name cannot be longer than {{ limit }} characters'
+    )]
+    #[Assert\NotBlank(message: 'The last name cannot be blank.')]
     #[ORM\Column(length: 30)]
     private ?string $lastName = null;
 
