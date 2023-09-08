@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Category;
 use App\Entity\City;
 use App\Entity\Game;
+use App\Entity\Item;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -31,48 +32,12 @@ class AppFixtures extends Fixture
         $admin->setLastName('Super');
         $manager->persist($admin);
 
-        // injection d'un user
-        $user = new User();
-        $user->setEmail('email@mail.com');
-        $user->setRoles([]);
-        $user->setPassword($this->hasher->hashPassword($user, 'Pa$$w0rd1234'));
-        $user->setFirstName('John');
-        $user->setLastName('Doe');
-        $manager->persist($user);
-
         // Cities
 
         $cityData = [
-            ['Paris', '75000'],
-            ['Marseille', '13000'],
-            ['Lyon', '69000'],
-            ['Toulouse', '31000'],
-            ['Nice', '06000'],
-            ['Nantes', '44000'],
-            ['Strasbourg', '67000'],
-            ['Montpellier', '34000'],
-            ['Bordeaux', '33000'],
-            ['Lille', '59000'],
-            ['Rennes', '35000'],
-            ['Reims', '51100'],
-            ['Cergy-Pontoise', '95000'],
-            ['Saint-Étienne', '42000'],
-            ['Toulon', '83000'],
-            ['Angers', '49000'],
-            ['Grenoble', '38000'],
-            ['Dijon', '21000'],
-            ['Nîmes', '30000'],
-            ['Aix-en-Provence', '13080'],
-            ['Saint-Quentin-en-Yvelines', '78000'],
-            ['Brest', '29000'],
-            ['Le Mans', '72000'],
-            ['Amiens', '80000'],
-            ['Tours', '37000'],
-            ['Limoges', '87000'],
-            ['Clermont-Ferrand', '63000'],
-            ['Villeurbanne', '69100'],
+            ['Niort', '79000'],
+            ['Poitiers', '86000'],
             ['La Rochelle', '17000'],
-            ['Besançon', '25000']
         ];
 
         $cities = []; // array to hold City objects
@@ -85,6 +50,36 @@ class AppFixtures extends Fixture
 
             $cities[] = $city;
         }
+
+        // Users
+
+        $user1 = new User();
+        $user1->setEmail('email@mail.com');
+        $user1->setRoles([]);
+        $user1->setPassword($this->hasher->hashPassword($user1, 'Pa$$w0rd1234'));
+        $user1->setFirstName('John');
+        $user1->setLastName('Doe');
+        $user1->setCity($cities[0]);
+        $manager->persist($user1);
+
+        $user2 = new User();
+        $user2->setEmail('email1@mail.com');
+        $user2->setRoles([]);
+        $user2->setPassword($this->hasher->hashPassword($user2, 'Pa$$w0rd1234'));
+        $user2->setFirstName('Richard');
+        $user2->setLastName('Roe');
+        $user2->setCity($cities[1]);
+        $manager->persist($user2);
+
+        $user3 = new User();
+        $user3->setEmail('email2@mail.com');
+        $user3->setRoles([]);
+        $user3->setPassword($this->hasher->hashPassword($user3, 'Pa$$w0rd1234'));
+        $user3->setFirstName('Jane');
+        $user3->setLastName('Smith');
+        $user3->setCity($cities[2]);
+        $manager->persist($user3);
+
 
         // Categories
 
@@ -138,7 +133,6 @@ class AppFixtures extends Fixture
         $game1->addCategory($category1);
         $game1->addCategory($category2);
         $game1->addCategory($category6);
-
         $manager->persist($game1);
 
         $game2 = new Game();
@@ -147,7 +141,6 @@ class AppFixtures extends Fixture
         $game2->setImage('Top-ten-face-logo-BD-788x1024-64f885a4e2a69.jpg');
         $game2->addCategory($category1);
         $game2->addCategory($category3);
-
         $manager->persist($game2);
 
         $game3 = new Game();
@@ -156,7 +149,6 @@ class AppFixtures extends Fixture
         $game3->setImage('0393061-0-64f885cff33c4.jpg');
         $game3->addCategory($category1);
         $game3->addCategory($category4);
-
         $manager->persist($game3);
 
         $game4 = new Game();
@@ -165,7 +157,6 @@ class AppFixtures extends Fixture
         $game4->setImage('dobble-boite-64f885ea79d12.jpg');
         $game4->addCategory($category1);
         $game4->addCategory($category5);
-
         $manager->persist($game4);
 
         $game5 = new Game();
@@ -173,8 +164,37 @@ class AppFixtures extends Fixture
         $game5->setImage('image-64f88609281e5.jpg');
         $game5->addCategory($category2);
         $game5->addCategory($category3);
-
         $manager->persist($game5);
+
+        // Items
+
+        $item1 = new Item();
+        $item1->setGame($game1);
+        $item1->setStatus('perfect');
+        $item1->setAvailable(true);
+        $item1->setUser($user1);
+        $manager->persist($item1);
+
+        $item2 = new Item();
+        $item2->setGame($game3);
+        $item2->setStatus('good');
+        $item2->setAvailable(true);
+        $item2->setUser($user1);
+        $manager->persist($item2);
+
+        $item3 = new Item();
+        $item3->setGame($game4);
+        $item3->setStatus('average');
+        $item3->setAvailable(true);
+        $item3->setUser($user2);
+        $manager->persist($item3);
+
+        $item4 = new Item();
+        $item4->setGame($game5);
+        $item4->setStatus('average');
+        $item4->setAvailable(true);
+        $item4->setUser($user3);
+        $manager->persist($item4);
 
         $manager->flush();
     }

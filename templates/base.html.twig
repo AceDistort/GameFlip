@@ -27,6 +27,8 @@
                     {% endif %}
 
                     {% if is_granted('ROLE_USER') %}
+                        <a class="btn btn-outline-primary mx-2" href="{{ path('app_game_list') }}">Games</a>
+                        <a class="btn btn-outline-primary mx-2" href="{{ path('app_game_my_games') }}">My games</a>
                         <a class="btn btn-outline-primary mx-2" href="{{ path('app_profile', {'id': app.user.id}) }}">Profile</a>
                         <a class="btn btn-outline-primary mx-2" href="{{ path('app_logout') }}">Log Out</a>
                     {% else %}

@@ -25,7 +25,6 @@ class Item
     #[ORM\Column]
     private ?bool $available = null;
 
-    #[Assert\NotBlank(message: 'The user is required')]
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;

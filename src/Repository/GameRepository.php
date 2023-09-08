@@ -24,26 +24,23 @@ class GameRepository extends ServiceEntityRepository
     /**
      * @return Game[] Returns an array of Game objects
      */
-    public function findGamesByCity($cityId): array
+    public function findAvailableGamesByCity($cityId, $available): array
     {
-        return $this->createQueryBuilder('game')
+        $query = $this->createQueryBuilder('game')
             ->select('DISTINCT game')
             ->innerJoin('game.items', 'item')
             ->innerJoin('item.user', 'user')
             ->innerJoin('user.city', 'city')
             ->where('city.id = :cityId')
-            ->setParameter('cityId', $cityId)
+            ->setParameter('cityId', $cityId);
+
+        if ($available) {
+            $query->andWhere('item.available = :available')
+                ->setParameter('available', true);
+        }
+
+        return $query->setMaxResults(40)
             ->getQuery()
             ->getResult();
     }
-
-//    public function findOneBySomeField($value): ?Game
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }

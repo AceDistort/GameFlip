@@ -1,6 +1,16 @@
 import './styles/app_game.scss';
 
-document.getElementById('city-select').addEventListener('change', () => {
+const redirectWithFilter = () => {
     let cityId = document.getElementById('city-select').value;
-    window.location.href = `?cityId=${cityId}`;
+    let available = document.getElementById('available-checkbox').checked;
+    console.log(cityId, available);
+    window.location.href = `?cityId=${cityId}&available=${available}`;
+}
+
+document.getElementById('city-select').addEventListener('change', () => {
+    redirectWithFilter();
+});
+
+document.getElementById('available-checkbox').addEventListener('change', () => {
+    redirectWithFilter();
 });
