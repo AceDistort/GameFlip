@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,6 +35,14 @@ class Item
     #[ORM\ManyToOne(inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Game $game = null;
+
+    #[ORM\OneToMany(mappedBy: 'firstItem', targetEntity: ItemTrade::class, orphanRemoval: true)]
+    private Collection $itemTrades;
+
+    public function __construct()
+    {
+        $this->itemTrades = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,6 +93,36 @@ class Item
     public function setGame(?Game $game): static
     {
         $this->game = $game;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ItemTrade>
+     */
+    public function getItemTrades(): Collection
+    {
+        return $this->itemTrades;
+    }
+
+    public function addItemTrade(ItemTrade $itemTrade): static
+    {
+        if (!$this->itemTrades->contains($itemTrade)) {
+            $this->itemTrades->add($itemTrade);
+            $itemTrade->setFirstItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItemTrade(ItemTrade $itemTrade): static
+    {
+        if ($this->itemTrades->removeElement($itemTrade)) {
+            // set the owning side to null (unless already changed)
+            if ($itemTrade->getFirstItem() === $this) {
+                $itemTrade->setFirstItem(null);
+            }
+        }
 
         return $this;
     }
