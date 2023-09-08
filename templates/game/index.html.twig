@@ -15,8 +15,8 @@
 {% block body %}
 
     <h3 class="mb-4">Games</h3>
-    <div class="d-flex flex-wrap align-items-center gap-4">
-        <select class="form-select my-3" aria-label="City select" style="width: 200px" id="city-select">
+    <div class="d-flex flex-wrap align-items-center gap-4 my-3">
+        <select class="form-select " aria-label="City select" style="width: 200px" id="city-select">
             {% for city in cities %}
                 <option value="{{ city.id }}"
                         {% if selectedCity.id == city.id %}selected{% endif %}>{{ city.name }}</option>
