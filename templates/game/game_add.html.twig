@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add a game{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app_game') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app_game') }}
+{% endblock %}
+
+{% block body %}
+
+    <h3 class="mb-4">Add a game</h3>
+    {{ form_start(form) }}
+        <div class="row">
+            <div class="col-4">
+                {{ form_row(form.game) }}
+            </div>
+            <div class="col-4">
+                {{ form_row(form.status) }}
+            </div>
+            <div class="col-4">
+                {{ form_row(form.available) }}
+            </div>
+        </div>
+
+        {% if form_errors(form) %}
+            {{ form_errors(form) }}
+        {% endif %}
+
+        {% do form.user.setRendered %}
+
+        <button type="submit" class="btn btn-success">Add</button>
+    {{ form_end(form)}}
+
+{% endblock %}

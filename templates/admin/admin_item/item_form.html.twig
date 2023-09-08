@@ -1,0 +1,32 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ app.request.get('_route') == "app_admin_item_add" ? "Add" : "Modify" }} an item{% endblock %}
+
+{% block contenu %}
+    <h1>{{ app.request.get('_route') == "app_admin_item_add" ? "Add" : "Modify" }} an item</h1>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.game) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.status) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.available) }}
+        </div>
+        <div class="col-4">
+            {{ form_row(form.user) }}
+        </div>
+    </div>
+
+{#    <p class="h4">Trades</p>#}
+{#    {{ form_row(form.itemTrades) }}#}
+
+    {% if app.request.get('_route') == "app_admin_item_add" %}
+        <button type="submit" class="btn btn-success">Add</button>
+    {% else %}
+        <button type="submit" class="btn btn-success">Modify</button>
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}

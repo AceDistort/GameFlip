@@ -21,28 +21,26 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-//    /**
-//     * @return Game[] Returns an array of Game objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findAvailableGamesByCity($cityId, $available): array
+    {
+        $query = $this->createQueryBuilder('game')
+            ->select('DISTINCT game')
+            ->innerJoin('game.items', 'item')
+            ->innerJoin('item.user', 'user')
+            ->innerJoin('user.city', 'city')
+            ->where('city.id = :cityId')
+            ->setParameter('cityId', $cityId);
 
-//    public function findOneBySomeField($value): ?Game
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($available) {
+            $query->andWhere('item.available = :available')
+                ->setParameter('available', true);
+        }
+
+        return $query->setMaxResults(40)
+            ->getQuery()
+            ->getResult();
+    }
 }

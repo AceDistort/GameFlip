@@ -9,8 +9,8 @@
         <thead>
         <tr>
             <th scope="col">Name</th>
-            <th scope="col">Description</th>
             <th scope="col">Color</th>
+            <th scope="col">Description</th>
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -18,8 +18,11 @@
         {% for category in categories %}
             <tr>
                 <th>{{ category.name }}</th>
+                <td>
+                    <div style="width: 30px; height: 20px; background-color: {{ category.color }}"></div>
+                    {{ category.color }}
+                </td>
                 <td>{{ category.description }}</td>
-                <td>{{ category.color }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path('app_admin_category_modify', {'id': category.id}) }}">Modify</a>
                     <a class="btn btn-danger" href="{{ path('app_admin_category_delete', {'id': category.id}) }}"

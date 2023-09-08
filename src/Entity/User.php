@@ -3,10 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -17,6 +21,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Email(message: 'The email {{ value }} is not a valid email.')]
+    #[Assert\NotBlank(message: 'The email cannot be blank.')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -26,14 +32,52 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
+    #[RollerworksPassword\PasswordRequirements(
+        minLength: 8,
+        requireLetters: true,
+        requireCaseDiff: true,
+        requireNumbers: true,
+        requireSpecialCharacter: true,
+        tooShortMessage: 'Your password must be at least {{length}} characters long',
+        missingLettersMessage: 'Your password must contain at least one letter',
+        requireCaseDiffMessage: 'Your password must contain lowercase and uppercase letters',
+        missingNumbersMessage: 'Your password must contain at least one number',
+        missingSpecialCharacterMessage: 'Your password must contain at least one special character',
+    )]
+    #[Assert\NotBlank(message: 'Please enter a password.')]
     #[ORM\Column]
     private ?string $password = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: 'The first name must be at least {{ limit }} characters long',
+        maxMessage: 'The first name cannot be longer than {{ limit }} characters'
+    )]
+    #[Assert\NotBlank(message: 'The first name cannot be blank.')]
     #[ORM\Column(length: 30)]
     private ?string $firstName = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 30,
+        minMessage: 'The last name must be at least {{ limit }} characters long',
+        maxMessage: 'The last name cannot be longer than {{ limit }} characters'
+    )]
+    #[Assert\NotBlank(message: 'The last name cannot be blank.')]
     #[ORM\Column(length: 30)]
     private ?string $lastName = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?City $city = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Item::class, orphanRemoval: true)]
+    private Collection $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -125,6 +169,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): static
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): static
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getUser() === $this) {
+                $item->setUser(null);
+            }
+        }
 
         return $this;
     }

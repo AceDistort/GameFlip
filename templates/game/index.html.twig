@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Jeux disponibles{% endblock %}
+{% block title %}Games in your city{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -14,7 +14,22 @@
 
 {% block body %}
 
-    <h3 class="mb-4">Jeux disponibles</h3>
+    <h3 class="mb-4">Games</h3>
+    <div class="d-flex flex-wrap align-items-center gap-4 my-3">
+        <select class="form-select " aria-label="City select" style="width: 200px" id="city-select">
+            {% for city in cities %}
+                <option value="{{ city.id }}"
+                        {% if selectedCity.id == city.id %}selected{% endif %}>{{ city.name }}</option>
+            {% endfor %}
+        </select>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox"
+                   id="available-checkbox" {% if available == "true" %} checked {% endif %}>
+            <label class="form-check-label" for="available-checkbox">
+                Show only available games
+            </label>
+        </div>
+    </div>
     <div class="row gx-2 gy-2">
         {% for game in games %}
             <div class="col-xl-3 col-lg-4 col-md-6">
@@ -29,8 +44,12 @@
                          alt="Game image">
                     <div class="card-body">
                         <h5 class="card-title">{{ game.name }}</h5>
-                        <p>{% for category in game.categories %}<span class="badge rounded-pill my-1" style="background-color: {{ category.color }}">{{ category.name }}</span>&nbsp;{% endfor %}</p>
-                        <a href="{{ path("app_game_details", {id: game.id}) }}" class="btn btn-primary">Details</a>
+                        <p class="card-categories">{% for category in game.categories %}<span
+                                class="badge rounded-pill my-1"
+                                style="background-color: {{ category.color }}">{{ category.name }}</span>&nbsp;{% endfor %}
+                        </p>
+                        <a href="{{ path("app_game_details", {id: game.id, cityId: selectedCity.id}) }}"
+                           class="btn btn-primary">More</a>
                     </div>
                 </div>
             </div>

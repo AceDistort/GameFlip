@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
@@ -16,9 +17,22 @@ class Game
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'Le nom ne doit pas dépasser {{ limit }} caractères'
+    )]
+    #[Assert\NotNull(message: 'Le nom ne doit pas être vide')]
     #[ORM\Column(length: 50)]
     private ?string $name = null;
 
+    #[Assert\Length(
+        min: 10,
+        max: 5000,
+        minMessage: 'La description doit contenir au moins {{ limit }} caractères',
+        maxMessage: 'La description ne doit pas dépasser {{ limit }} caractères'
+    )]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
@@ -28,9 +42,13 @@ class Game
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'games')]
     private Collection $categories;
 
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Item::class, orphanRemoval: true)]
+    private Collection $items;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,6 +114,36 @@ class Game
     {
         if ($this->categories->removeElement($category)) {
             $category->removeGame($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Item>
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): static
+    {
+        if (!$this->items->contains($item)) {
+            $this->items->add($item);
+            $item->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): static
+    {
+        if ($this->items->removeElement($item)) {
+            // set the owning side to null (unless already changed)
+            if ($item->getGame() === $this) {
+                $item->setGame(null);
+            }
         }
 
         return $this;
