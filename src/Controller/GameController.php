@@ -21,6 +21,7 @@ class GameController extends AbstractController
     public function list(GameRepository $gameRepository, CityRepository $cityRepository, Request $request): Response
     {
 
+
         $cityId = $request->query->get('cityId');
         $available = $request->query->get('available');
 
@@ -33,6 +34,10 @@ class GameController extends AbstractController
             // select the first city
             $selectedCity = $cityRepository->findBy([], [], 1)[0];
         };
+
+        if (!$selectedCity) {
+            throw $this->createNotFoundException();
+        }
 
         switch ($available) {
             case 'true':
@@ -94,10 +99,30 @@ class GameController extends AbstractController
     }
 
     #[Route('/{id}', name: '_details')]
-    public function details(GameRepository $gameRepository, int $id): Response
+    public function details(GameRepository $gameRepository, CityRepository $cityRepository, ItemRepository $itemRepository, int $id, Request $request): Response
     {
+
+        $cityId = $request->get('cityId');
+
+        if (!$cityId) {
+            if ($this->getUser()->getCity()) {
+                $cityId = $this->getUser()->getCity()->getId();
+            }
+        }
+
+        $game = $gameRepository->find($id);
+        $city = $cityRepository->find($cityId);
+
+        if (!$game || !$city) {
+            throw $this->createNotFoundException();
+        }
+
+        $availableItems = $itemRepository->findItemsByGame($id, $cityId);
+
         return $this->render('game/game_details.html.twig', [
-            "game" => $gameRepository->find($id),
+            "game" => $game,
+            "city" => $city,
+            "availableItems" => $availableItems,
         ]);
     }
 

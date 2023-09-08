@@ -48,7 +48,8 @@
                                 class="badge rounded-pill my-1"
                                 style="background-color: {{ category.color }}">{{ category.name }}</span>&nbsp;{% endfor %}
                         </p>
-                        <a href="{{ path("app_game_details", {id: game.id}) }}" class="btn btn-primary">More</a>
+                        <a href="{{ path("app_game_details", {id: game.id, cityId: selectedCity.id}) }}"
+                           class="btn btn-primary">More</a>
                     </div>
                 </div>
             </div>

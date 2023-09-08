@@ -178,7 +178,7 @@ class AppFixtures extends Fixture
         $item2 = new Item();
         $item2->setGame($game3);
         $item2->setStatus('good');
-        $item2->setAvailable(true);
+        $item2->setAvailable(false);
         $item2->setUser($user1);
         $manager->persist($item2);
 
@@ -191,10 +191,31 @@ class AppFixtures extends Fixture
 
         $item4 = new Item();
         $item4->setGame($game5);
-        $item4->setStatus('average');
+        $item4->setStatus('good');
         $item4->setAvailable(true);
         $item4->setUser($user3);
         $manager->persist($item4);
+
+        $item5 = new Item();
+        $item5->setGame($game5);
+        $item5->setStatus('perfect');
+        $item5->setAvailable(false);
+        $item5->setUser($user3);
+        $manager->persist($item5);
+
+        $item6 = new Item();
+        $item6->setGame($game1);
+        $item6->setStatus('average');
+        $item6->setAvailable(true);
+        $item6->setUser($user3);
+        $manager->persist($item6);
+
+        $item7 = new Item();
+        $item7->setGame($game2);
+        $item7->setStatus('bad');
+        $item7->setAvailable(false);
+        $item7->setUser($user3);
+        $manager->persist($item7);
 
         $manager->flush();
     }

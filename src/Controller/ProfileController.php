@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Form\ProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,15 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile/{id}', name: 'app_profile')]
-    public function profile(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(Request $request, EntityManagerInterface $entityManager): Response
     {
 
-        // check if the connected user have the same id as the profile
-
-        if($this->getUser()->getId() !== $user->getId()) {
-            throw $this->createAccessDeniedException();
-        }
+        $user = $this->getUser();
 
         $form = $this->createForm(ProfileType::class, $user);
 

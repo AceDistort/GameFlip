@@ -22,7 +22,29 @@
             <h3 class="h3 my-2">{{ game.name }}</h3>
             <p>{% for category in game.categories %}<span class="badge rounded-pill my-1" style="background-color: {{ category.color }}">{{ category.name }}</span>&nbsp;{% endfor %}</p>
             <p class="game-details__info__description">{{ game.description }}</p>
-            <a class="btn btn-primary">Reserve</a>
+            <p class="h4">Availability in {{ city.name }}</p>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col" class="">Owner</th>
+                    <th scope="col">Status</th>
+                    {% if city is null %}
+                        <th scope="col">City</th>{% endif %}
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for availableItem in availableItems %}
+                    <tr>
+                        <td>{{ availableItem.user.firstName }} {{ availableItem.user.lastName }}</td>
+                        <td class="text-capitalize">{{ availableItem.status }}</td>
+                        {% if city is null %}
+                            <td>{{ availableItem.user.city.name }}</td>{% endif %}
+                        <td><a class="btn btn-primary">Reserve</a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 

@@ -32,4 +32,24 @@ class ItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findItemsByGame($gameId, $cityId): array
+    {
+        $query = $this->createQueryBuilder('item')
+            ->select('item')
+            ->innerJoin('item.game', 'game')
+            ->where('item.available = true')
+            ->where('game.id = :gameId')
+            ->setParameter('gameId', $gameId);
+
+        if ($cityId) {
+            $query->innerJoin('item.user', 'user')
+                ->innerJoin('user.city', 'city')
+                ->andWhere('city.id = :cityId')
+                ->setParameter('cityId', $cityId);
+        };
+
+        return $query->getQuery()
+            ->getResult();
+    }
 }
