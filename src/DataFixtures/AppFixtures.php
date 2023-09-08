@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\City;
 use App\Entity\Game;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -30,6 +31,62 @@ class AppFixtures extends Fixture
         $admin->setLastName('Super');
         $manager->persist($admin);
 
+        // injection d'un user
+        $user = new User();
+        $user->setEmail('email@mail.com');
+        $user->setRoles([]);
+        $user->setPassword($this->hasher->hashPassword($user, 'Pa$$w0rd1234'));
+        $user->setFirstName('John');
+        $user->setLastName('Doe');
+        $manager->persist($user);
+
+        // Cities
+
+        $cityData = [
+            ['Paris', '75000'],
+            ['Marseille', '13000'],
+            ['Lyon', '69000'],
+            ['Toulouse', '31000'],
+            ['Nice', '06000'],
+            ['Nantes', '44000'],
+            ['Strasbourg', '67000'],
+            ['Montpellier', '34000'],
+            ['Bordeaux', '33000'],
+            ['Lille', '59000'],
+            ['Rennes', '35000'],
+            ['Reims', '51100'],
+            ['Cergy-Pontoise', '95000'],
+            ['Saint-Étienne', '42000'],
+            ['Toulon', '83000'],
+            ['Angers', '49000'],
+            ['Grenoble', '38000'],
+            ['Dijon', '21000'],
+            ['Nîmes', '30000'],
+            ['Aix-en-Provence', '13080'],
+            ['Saint-Quentin-en-Yvelines', '78000'],
+            ['Brest', '29000'],
+            ['Le Mans', '72000'],
+            ['Amiens', '80000'],
+            ['Tours', '37000'],
+            ['Limoges', '87000'],
+            ['Clermont-Ferrand', '63000'],
+            ['Villeurbanne', '69100'],
+            ['La Rochelle', '17000'],
+            ['Besançon', '25000']
+        ];
+
+        $cities = []; // array to hold City objects
+
+        foreach ($cityData as $data) {
+            $city = new City();
+            $city->setName($data[0]);
+            $city->setPostalCode($data[1]);
+            $manager->persist($city);
+
+            $cities[] = $city;
+        }
+
+        // Categories
 
         $category1 = new Category();
         $category1->setName('Party');

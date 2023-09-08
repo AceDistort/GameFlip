@@ -15,6 +15,12 @@
 {% block body %}
 
     <h3 class="mb-4">Games</h3>
+    <select class="form-select my-3" aria-label="City select" style="width: 200px" id="city-select">
+        {% for city in cities %}
+            <option value="{{ city.id }}"
+                    {% if selectedCity.id == city.id %}selected{% endif %}>{{ city.name }}</option>
+        {% endfor %}
+    </select>
     <div class="row gx-2 gy-2">
         {% for game in games %}
             <div class="col-xl-3 col-lg-4 col-md-6">

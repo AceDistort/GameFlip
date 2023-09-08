@@ -5,13 +5,12 @@ namespace App\Controller\Admin;
 use App\Entity\Game;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Service\UploadService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/game', name: 'app_admin_game')]
 class AdminGameController extends AbstractController
@@ -29,7 +28,7 @@ class AdminGameController extends AbstractController
     public function addOrModify(Request $request,
                             EntityManagerInterface $entityManager,
                             GameRepository $gameRepository,
-                            SluggerInterface $slugger,
+                                UploadService $uploadService,
                             int $id = null): Response
     {
         if($id == null) {
@@ -47,19 +46,7 @@ class AdminGameController extends AbstractController
             $image = $form->get('image')->getData();
 
             if ($image) {
-                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
-
-                try {
-                    $image->move(
-                        $this->getParameter('game_image_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    throw new \Exception("Error while uploading the image");
-                }
-
+                $newFilename = $uploadService->upload($image, $this->getParameter('game_image_directory'));
                 $game->setImage($newFilename);
             }
 

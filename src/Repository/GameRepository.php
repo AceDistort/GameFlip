@@ -21,20 +21,21 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-//    /**
-//     * @return Game[] Returns an array of Game objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('g')
-//            ->andWhere('g.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('g.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findGamesByCity($cityId): array
+    {
+        return $this->createQueryBuilder('game')
+            ->select('DISTINCT game')
+            ->innerJoin('game.items', 'item')
+            ->innerJoin('item.user', 'user')
+            ->innerJoin('user.city', 'city')
+            ->where('city.id = :cityId')
+            ->setParameter('cityId', $cityId)
+            ->getQuery()
+            ->getResult();
+    }
 
 //    public function findOneBySomeField($value): ?Game
 //    {

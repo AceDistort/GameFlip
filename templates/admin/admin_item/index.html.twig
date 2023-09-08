@@ -1,0 +1,35 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}Item{% endblock %}
+
+{% block contenu %}
+    <p class="h3">Item</p>
+    <a class="btn btn-primary m-3" href="{{ path('app_admin_item_add') }}">Add an item</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Game</th>
+            <th scope="col">Owner</th>
+            <th scope="col">Status</th>
+            <th scope="col">Avalaible</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.game.name }}</td>
+                <td>{{ item.user.firstName ~ " " ~ item.user.lastName }}</td>
+                <td class="text-capitalize">{{ item.status }}</td>
+                <td>{{ item.available ? '✔ Yes' : '✖ No' }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('app_admin_item_modify', {'id': item.id}) }}">Modify</a>
+                    <a class="btn btn-danger" href="{{ path('app_admin_item_delete', {'id': item.id}) }}"
+                       onclick="return confirm('Are you sure you want to delete this item ?')"
+                    >Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

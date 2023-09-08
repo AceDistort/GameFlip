@@ -1,0 +1,23 @@
+{% extends 'admin/admin_base.html.twig' %}
+
+{% block title %}{{ app.request.get('_route') == "app_admin_city_add" ? "Add" : "Modify" }} a city{% endblock %}
+
+{% block contenu %}
+    <h1>{{ app.request.get('_route') == "app_admin_city_add" ? "Add" : "Modify" }} a city</h1>
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-4">
+            {{ form_row(form.name) }}
+        </div>
+        <div class="col-8">
+            {{ form_row(form.postalCode) }}
+        </div>
+    </div>
+
+    {% if app.request.get('_route') == "app_admin_city_add" %}
+        <button type="submit" class="btn btn-success">Add</button>
+    {% else %}
+        <button type="submit" class="btn btn-success">Modify</button>
+    {% endif %}
+    {{ form_end(form) }}
+{% endblock %}
